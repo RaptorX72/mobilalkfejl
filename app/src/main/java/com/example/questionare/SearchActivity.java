@@ -76,11 +76,13 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("searchterm", searchTB.getText().toString());
-        editor.putBoolean("includeUnknown", cbUnknown.isChecked());
-        editor.putBoolean("includeRetired", cbRetired.isChecked());
-        editor.apply();
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("searchterm", searchTB.getText().toString());
+            editor.putBoolean("includeUnknown", cbUnknown.isChecked());
+            editor.putBoolean("includeRetired", cbRetired.isChecked());
+            editor.apply();
+        }
     }
 
     @Override

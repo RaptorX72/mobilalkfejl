@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                lqa.notifyDataSetChanged();
+                lqa = new ListQuestionaresAdapter(this, questionares);
+                recView.setAdapter(lqa);
             }
         });
-        lqa.notifyDataSetChanged();
         notifHelper.PushAlert(questionare.getName() + " was deleted!");
     }
 }
