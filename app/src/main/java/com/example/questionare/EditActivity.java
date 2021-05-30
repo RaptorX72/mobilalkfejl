@@ -136,6 +136,13 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+        //overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
     public void RemoveQuestionById(String id) {
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);

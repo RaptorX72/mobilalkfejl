@@ -10,4 +10,6 @@ public interface QuestionareDAO {
     void UpdateQuestionare(Questionare questionare);
     void DeleteQuestionareById(String id);
     void DeleteQuestionare(Questionare questionare);
+    ArrayList<Questionare> getQuestionares(String text, boolean unknown, boolean retired);
+
 }

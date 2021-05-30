@@ -2,89 +2,51 @@ package com.example.questionare;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 public class IQuestionareDAO implements QuestionareDAO {
     private static IQuestionareDAO instance;
-    private ArrayList<Questionare> questionares;
+    private static ArrayList<Questionare> questionares;
+    private static FirebaseFirestore store;
+    private static CollectionReference coll;
+
+    private static String PLACEHOLDER_HEY = "XBAykOTSMbI5GpZ723qf";
 
     public static IQuestionareDAO getInstance() {
-        if (instance == null) instance = new IQuestionareDAO();
+        if (instance == null) {
+            instance = new IQuestionareDAO();
+            store = FirebaseFirestore.getInstance();
+            coll = store.collection("Questionares");
+        }
         return instance;
     }
 
     public IQuestionareDAO() {
         questionares = new ArrayList<>();
-        Log.d("Activity", "lefutott!");
-        ArrayList<Question> questions = new ArrayList<>();
-        ArrayList<Question> questions2 = new ArrayList<>();
-
-        questions.add( new Question(
-                "linkid1",
-                Question.QuestionType.INTEGER,
-                "desc",
-                "How old are you?"
-        ));
-
-        questions.add( new Question(
-                "linkid2",
-                Question.QuestionType.STRING,
-                "desc",
-                "What is your name?"
-        ));
-
-        questions.add( new Question(
-                "linkid3",
-                Question.QuestionType.BOOLEAN,
-                "desc",
-                "Are you studying in a university?"
-        ));
-
-
-        questions2.add( new Question(
-                "linkid1",
-                Question.QuestionType.INTEGER,
-                "desc",
-                "How old are you?"
-        ));
-
-        questions2.add( new Question(
-                "linkid2",
-                Question.QuestionType.STRING,
-                "desc",
-                "What is your name?"
-        ));
-
-        questions2.add( new Question(
-                "linkid3",
-                Question.QuestionType.BOOLEAN,
-                "desc",
-                "Are you studying in a university?"
-        ));
-
-        questionares.add( new Questionare(
-                "uid1",
-                Questionare.Status.ACTIVE,
-                0,
-                "First questionare",
-                "the first",
-                "me",
-                questions
-        ));
-
-        questionares.add( new Questionare(
-                "uid2",
-                Questionare.Status.RETIRED,
-                0,
-                "Second questionare",
-                "the first",
-                "me",
-                questions2
-        ));
+        questionares = getAllQuestionares();
     }
 
     @Override
     public ArrayList<Questionare> getAllQuestionares() {
+        questionares.clear();
+        if (coll != null) {
+            coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                    if (document.getId().equals(PLACEHOLDER_HEY)) continue;
+                    Questionare q = document.toObject(Questionare.class);
+                    questionares.add(q);
+                }
+            });
+        }
         return questionares;
     }
 
@@ -102,13 +64,18 @@ public class IQuestionareDAO implements QuestionareDAO {
 
     @Override
     public void UpdateQuestionare(Questionare questionare) {
-        for (int i = 0; i < questionares.size(); i++) {
-            Questionare q = questionares.get(i);
-            if (q.getUri().equals(questionare.getUri())) {
-                questionares.set(i, questionare);
-                break;
+        coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                if (document.getId().equals(PLACEHOLDER_HEY)) continue;
+                Questionare q = document.toObject(Questionare.class);
+                if (q.getUri().equals(questionare.getUri())) {
+                    coll.document(document.getId()).delete();
+                    coll.add(questionare);
+                    questionares = getAllQuestionares();
+                    return;
+                }
             }
-        }
+        });
     }
 
     @Override
@@ -118,18 +85,36 @@ public class IQuestionareDAO implements QuestionareDAO {
 
     @Override
     public void DeleteQuestionare(Questionare questionare) {
-        for (int i = 0; i < questionares.size(); i++) {
-            Questionare q = questionares.get(i);
-            if (q.getUri().equals(questionare.getUri())) {
-                questionares.remove(i);
-                break;
+        coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                if (document.getId().equals(PLACEHOLDER_HEY)) continue;
+                Questionare q = document.toObject(Questionare.class);
+                if (q.getUri().equals(questionare.getUri())) {
+                    coll.document(document.getId()).delete();
+                    questionares = getAllQuestionares();
+                    return;
+                }
             }
-        }
+        });
     }
 
     @Override
     public void AddQuestionare(Questionare questionare) {
-        Log.d("DAO", "added questionare " + questionare.getName());
+        coll.add(questionare);
         questionares.add(questionare);
+    }
+
+    @Override
+    public ArrayList<Questionare> getQuestionares(String text, boolean unknown, boolean retired) {
+        ArrayList<Questionare> results = new ArrayList<>();
+        /*for (Questionare q : questionares) {
+            if (text.isEmpty()) {
+                results.add(q);
+            }
+            else if (q.getName().toLowerCase().contains(text.toLowerCase())) {
+                results.add(q);
+            }
+        }*/
+        return results;
     }
 }

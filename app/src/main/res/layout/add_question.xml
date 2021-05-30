@@ -16,13 +16,16 @@
 
     <EditText
         android:id="@+id/questionTitleTextBox"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -43,43 +46,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7">
 
-        <RadioButton
-            android:id="@+id/radioButtonBoolean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes or No"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <RadioButton
-            android:id="@+id/radioButtonDecimal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Decimal"
-            app:layout_constraintStart_toEndOf="@+id/radioButtonBoolean"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            <RadioButton
+                android:id="@+id/radioButtonString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text"
+                app:layout_constraintStart_toEndOf="@+id/radioButtonInteger"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <RadioButton
-            android:id="@+id/radioButtonInteger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Whole number"
-            app:layout_constraintStart_toEndOf="@+id/radioButtonDecimal"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            <RadioButton
+                android:id="@+id/radioButtonBoolean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes or No"
+                app:layout_constraintStart_toStartOf="@+id/textView7"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <RadioButton
-            android:id="@+id/radioButtonString"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text"
-            app:layout_constraintStart_toEndOf="@+id/radioButtonInteger"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            <RadioButton
+                android:id="@+id/radioButtonInteger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Whole number"
+                app:layout_constraintStart_toEndOf="@+id/radioButtonDecimal"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+            <RadioButton
+                android:id="@+id/radioButtonDecimal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decimal"
+                app:layout_constraintStart_toEndOf="@+id/radioButtonBoolean"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </RadioGroup>
 
     <Button
         android:id="@+id/buttonSaveQuestion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:text="Add question"
         app:layout_constraintBottom_toTopOf="@+id/buttonDiscardQuestion"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,6 +102,10 @@
         android:id="@+id/buttonDiscardQuestion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:text="Discard question"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,13 +122,16 @@
 
     <EditText
         android:id="@+id/questionQuestionMultiLineTextBox"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

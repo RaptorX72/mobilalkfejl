@@ -57,7 +57,7 @@ public class ListQuestionaresAdapter extends RecyclerView.Adapter<ListQuestionar
                 public void onClick(View v) {
                     Intent intent = new Intent(ct, EditActivity.class);
                     intent.putExtra("QuestionareId", questionare.getUri());
-                    ct.startActivity(intent);
+                    ((MainActivity)ct).startActivityForResult(intent, 2);
                 }
             });
             item.findViewById(R.id.buttonDelete).setOnClickListener(new View.OnClickListener() {

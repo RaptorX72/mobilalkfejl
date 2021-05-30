@@ -12,6 +12,10 @@ public class Question implements Serializable {
     private String text;
     private String question;
 
+    public Question() {
+
+    }
+
     public Question(String linkId, QuestionType type, String text, String question/*, Answer valueSet*/) {
         this.linkId = linkId;
         this.type = type;

@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".EditActivity"/>
         <activity android:name=".AdQuestionActivity"/>
+        <activity android:name=".SearchActivity"/>
     </application>
 
 </manifest>

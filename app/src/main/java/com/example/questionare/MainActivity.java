@@ -24,31 +24,39 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     //private FirebaseAuth mAuth;
-    RecyclerView recView;
+    private RecyclerView recView;
     private IQuestionareDAO questionareDAO;
-    ArrayList<Questionare> questionares;
-    ListQuestionaresAdapter lqa;
+    private ArrayList<Questionare> questionares;
+    private ListQuestionaresAdapter lqa;
+    private NotificationHelper notifHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recView = findViewById(R.id.recyclerView);
-        Button addQuestionare = findViewById(R.id.buttonAddQuestionare);
-
         questionareDAO = IQuestionareDAO.getInstance();
         questionares = questionareDAO.getAllQuestionares();
         lqa = new ListQuestionaresAdapter(this, questionares);
         recView.setAdapter(lqa);
         recView.setLayoutManager(new LinearLayoutManager(this));
+        notifHelper = new NotificationHelper(this);
 
-        addQuestionare.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonAddQuestionare).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
                 intent.putExtra("QuestionareId", "");
-                startActivityForResult(intent, 1);
-                questionares = questionareDAO.getAllQuestionares();
-                lqa.notifyDataSetChanged();
+                startActivityForResult(intent, 2);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+
+        findViewById(R.id.buttonSearch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }
@@ -56,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
                 questionares = questionareDAO.getAllQuestionares();
                 lqa.notifyDataSetChanged();
@@ -64,9 +72,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
     public void DeleteQuestionare(Questionare questionare) {
         questionareDAO.DeleteQuestionare(questionare);
         questionares = questionareDAO.getAllQuestionares();
         lqa.notifyDataSetChanged();
+        notifHelper.PushAlert(questionare.getName() + " was deleted!");
     }
 }

@@ -16,6 +16,10 @@ public class Questionare implements Serializable {
     private String publisherName;
     private ArrayList<Question> questions;
 
+    public Questionare() {
+
+    }
+
     public Questionare(String uri, Status status, int version, String name, String title, String publisherName, ArrayList<Question> questions) {
         this.uri = uri;
         this.status = status;
