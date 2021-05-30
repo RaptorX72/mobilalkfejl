@@ -2,17 +2,12 @@ package com.example.questionare;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class ListQuestionaresAdapter extends RecyclerView.Adapter<ListQuestionaresAdapter.ListQuestionaresViewHolder> {
@@ -35,7 +30,7 @@ public class ListQuestionaresAdapter extends RecyclerView.Adapter<ListQuestionar
 
     @Override
     public void onBindViewHolder(@NonNull ListQuestionaresAdapter.ListQuestionaresViewHolder holder, int position) {
-        holder.quesionareName.setText(questionares.get(position).getName());
+        holder.questionareName.setText(questionares.get(position).getName());
         holder.questionare = questionares.get(position);
         holder.ct = context;
     }
@@ -48,25 +43,16 @@ public class ListQuestionaresAdapter extends RecyclerView.Adapter<ListQuestionar
     public class ListQuestionaresViewHolder extends RecyclerView.ViewHolder {
         Context ct;
         Questionare questionare;
-        TextView quesionareName;
+        TextView questionareName;
         public ListQuestionaresViewHolder(@NonNull View item) {
             super(item);
-            quesionareName = item.findViewById(R.id.quesionarename);
-            item.findViewById(R.id.buttonEdit).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ct, EditActivity.class);
-                    //intent.putExtra("QuestionareId", questionare.getUri());
-                    intent.putExtra("QuestionareId", questionare);
-                    ((MainActivity)ct).startActivityForResult(intent, 2);
-                }
+            questionareName = item.findViewById(R.id.quesionarename);
+            item.findViewById(R.id.buttonEdit).setOnClickListener(v -> {
+                Intent intent = new Intent(ct, EditActivity.class);
+                intent.putExtra("QuestionareId", questionare);
+                ((MainActivity)ct).startActivityForResult(intent, 2);
             });
-            item.findViewById(R.id.buttonDelete).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)ct).DeleteQuestionare(questionare);
-                }
-            });
+            item.findViewById(R.id.buttonDelete).setOnClickListener(v -> ((MainActivity)ct).DeleteQuestionare(questionare));
         }
     }
 }

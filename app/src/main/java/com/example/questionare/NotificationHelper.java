@@ -4,7 +4,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
-
 import androidx.core.app.NotificationCompat;
 
 
@@ -33,9 +32,5 @@ public class NotificationHelper {
             .setContentText(message)
             .setSmallIcon(R.drawable.common_full_open_on_phone);
         nm.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    public void Cancel() {
-        nm.cancel(NOTIFICATION_ID);
     }
 }

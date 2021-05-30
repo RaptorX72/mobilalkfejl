@@ -2,20 +2,11 @@ package com.example.questionare;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class ListQuestionsAdapter extends RecyclerView.Adapter<ListQuestionsAdapter.ListQuestionsViewHolder> {
@@ -57,12 +48,7 @@ public class ListQuestionsAdapter extends RecyclerView.Adapter<ListQuestionsAdap
             super(item);
             questionTB = item.findViewById(R.id.textViewQuestion);
             typeTB = item.findViewById(R.id.textViewQuestionType);
-            item.findViewById(R.id.buttonRemove).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((EditActivity)context).RemoveQuestionById(question.getLinkId());
-                }
-            });
+            item.findViewById(R.id.buttonRemove).setOnClickListener(v -> ((EditActivity)context).RemoveQuestionById(question.getLinkId()));
         }
     }
 }
