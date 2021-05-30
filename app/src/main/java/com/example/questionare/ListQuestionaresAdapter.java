@@ -56,7 +56,8 @@ public class ListQuestionaresAdapter extends RecyclerView.Adapter<ListQuestionar
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ct, EditActivity.class);
-                    intent.putExtra("QuestionareId", questionare.getUri());
+                    //intent.putExtra("QuestionareId", questionare.getUri());
+                    intent.putExtra("QuestionareId", questionare);
                     ((MainActivity)ct).startActivityForResult(intent, 2);
                 }
             });

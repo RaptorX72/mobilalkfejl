@@ -12,41 +12,48 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.TimerTask;
+
 
 public class IQuestionareDAO implements QuestionareDAO {
+    interface FirebaseCallback {
+        void onResponse(Questionare q);
+    }
     private static IQuestionareDAO instance;
-    private static ArrayList<Questionare> questionares;
-    private static FirebaseFirestore store;
-    private static CollectionReference coll;
+    private ArrayList<Questionare> questionares;
+    private FirebaseFirestore store;
+    private CollectionReference coll;
 
     private static String PLACEHOLDER_HEY = "XBAykOTSMbI5GpZ723qf";
 
     public static IQuestionareDAO getInstance() {
         if (instance == null) {
+            //store = FirebaseFirestore.getInstance();
             instance = new IQuestionareDAO();
-            store = FirebaseFirestore.getInstance();
-            coll = store.collection("Questionares");
+            //coll = store.collection("Questionares");
         }
         return instance;
     }
 
     public IQuestionareDAO() {
+        store = FirebaseFirestore.getInstance();
+        coll = store.collection("Questionares");
         questionares = new ArrayList<>();
-        questionares = getAllQuestionares();
+        //questionares = getAllQuestionares();
     }
 
-    @Override
     public ArrayList<Questionare> getAllQuestionares() {
         questionares.clear();
-        if (coll != null) {
-            coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
-                    if (document.getId().equals(PLACEHOLDER_HEY)) continue;
-                    Questionare q = document.toObject(Questionare.class);
-                    questionares.add(q);
-                }
-            });
-        }
+        Log.d("Debug","first");
+        coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                if (document.getId().equals(PLACEHOLDER_HEY)) continue;
+                Questionare q = document.toObject(Questionare.class);
+                questionares.add(q);
+                Log.d("Debug","item");
+            }
+        });
+        Log.d("Debug","second");
         return questionares;
     }
 

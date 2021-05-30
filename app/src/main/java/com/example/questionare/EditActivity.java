@@ -15,22 +15,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 
 public class EditActivity extends AppCompatActivity {
     Questionare questionare;
     ArrayList<Question> questions;
-    IQuestionareDAO questionareDAO = IQuestionareDAO.getInstance();
     RecyclerView recView;
     ListQuestionsAdapter lqa;
+    private FirebaseFirestore store;
+    private CollectionReference coll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_add_questionare);
 
-        String uid = getIntent().getStringExtra("QuestionareId");
-        if (uid.isEmpty()) questionare = new Questionare("", Questionare.Status.UNKNOWN, 0, "", "", "", new ArrayList<>());
-        else questionare = questionareDAO.getQuestionareById(uid);
+        store = FirebaseFirestore.getInstance();
+        coll = store.collection("Questionares");
+
+        questionare = (Questionare)(getIntent().getSerializableExtra("QuestionareId"));
 
         recView = findViewById(R.id.questionsRecycleView);
 
@@ -91,7 +97,7 @@ public class EditActivity extends AppCompatActivity {
                     Toast.makeText(EditActivity.this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                boolean wasempty = uid.isEmpty();
+                boolean wasempty = questionare.getUri().isEmpty();//uid.isEmpty();
                 questionare.setName(name);
                 questionare.setTitle(title);
                 questionare.setPublisherName(publisher);
@@ -106,11 +112,25 @@ public class EditActivity extends AppCompatActivity {
                 questionare.setStatus(status);
                 if(wasempty) {
                     questionare.setUri(Common.GenerateUIID());
-                    questionareDAO.AddQuestionare(questionare);
-                } else questionareDAO.UpdateQuestionare(questionare);
-                Intent resultIntent = new Intent();
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                    coll.add(questionare);
+                    Intent resultIntent = new Intent();
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                } else {
+                    coll.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                            Questionare q = document.toObject(Questionare.class);
+                            if (q.getUri().equals(questionare.getUri())) {
+                                coll.document(document.getId()).delete();
+                                coll.add(questionare);
+                                break;
+                            }
+                            Intent resultIntent = new Intent();
+                            setResult(RESULT_OK, resultIntent);
+                            finish();
+                        }
+                    });
+                }
             }
         });
 
@@ -140,7 +160,6 @@ public class EditActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-        //overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void RemoveQuestionById(String id) {
